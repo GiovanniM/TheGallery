@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">The Gallery</string>
     <string name="search">Search</string>
-    <string name="search_query_hint">Search best Reddit images…</string>
+    <string name="search_query_hint">Search top Reddit images…</string>
+    <string name="search_hint">Start to search something…</string>
+    <string name="empty_result">Ops, can\'t find anything…</string>
 </resources>

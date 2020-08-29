@@ -6,7 +6,6 @@ import android.view.*
 import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
@@ -40,10 +39,32 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupRecyclerView()
-        viewModel.imagesLiveData.observe(viewLifecycleOwner, Observer { images ->
+        viewModel.imagesLiveData.observe(viewLifecycleOwner, { galleryUIModel ->
+            bindUIModel(galleryUIModel)
+        })
+    }
+
+    private fun bindUIModel(galleryUIModel: GalleryUIModel) {
+        galleryUIModel.run {
+            binding.searchProgress.visibility = if (searching) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+            binding.emptySearchHint.visibility = if (query.isNullOrEmpty()) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
+            binding.emptySearchResult.visibility =
+                if (!query.isNullOrEmpty() && images.isEmpty() && !searching) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
             redditAdapter.dataSet = images
             redditAdapter.notifyDataSetChanged()
-        })
+        }
     }
 
     private fun setupRecyclerView() {
@@ -93,7 +114,6 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
                 viewModel.getImages(newText)
                 return true
             }
-
         })
     }
 }
