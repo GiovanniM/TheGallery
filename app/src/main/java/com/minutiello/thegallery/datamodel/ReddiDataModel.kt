@@ -1,4 +1,4 @@
-package com.minutiello.thegallery
+package com.minutiello.thegallery.datamodel
 
 import com.squareup.moshi.Json
 
