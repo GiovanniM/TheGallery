@@ -44,7 +44,6 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
             redditAdapter.dataSet = images
             redditAdapter.notifyDataSetChanged()
         })
-        viewModel.getImages("cat")
     }
 
     private fun setupRecyclerView() {
