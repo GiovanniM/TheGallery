@@ -1,6 +1,5 @@
-package com.minutiello.thegallery.imagesrepository
+package com.minutiello.thegallery.redditrepository
 
-import com.minutiello.thegallery.datamodel.RedditResponse
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit

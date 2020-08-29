@@ -17,7 +17,9 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
     private var _binding: GalleryFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val redditAdapter = RedditImagesAdapter()
+    private val redditAdapter = RedditImagesAdapter {images, image ->
+        (activity as MainActivity).loadViewPager(images, image)
+    }
 
     companion object {
         fun newInstance() = GalleryFragment()

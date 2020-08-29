@@ -1,6 +1,4 @@
-package com.minutiello.thegallery.imagesrepository
-
-import com.minutiello.thegallery.datamodel.RedditImage
+package com.minutiello.thegallery.redditrepository
 
 interface ImagesRepository {
     fun getImages(keyword: String): List<RedditImage>

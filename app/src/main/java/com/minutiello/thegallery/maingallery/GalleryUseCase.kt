@@ -1,8 +1,8 @@
 package com.minutiello.thegallery.maingallery
 
-import com.minutiello.thegallery.datamodel.RedditImage
-import com.minutiello.thegallery.imagesrepository.ImagesRepository
-import com.minutiello.thegallery.imagesrepository.ImagesRepositoryFactory
+import com.minutiello.thegallery.redditrepository.RedditImage
+import com.minutiello.thegallery.redditrepository.ImagesRepository
+import com.minutiello.thegallery.redditrepository.ImagesRepositoryFactory
 
 interface GalleryUseCase {
     fun getImages(keyword: String): List<RedditImage>
