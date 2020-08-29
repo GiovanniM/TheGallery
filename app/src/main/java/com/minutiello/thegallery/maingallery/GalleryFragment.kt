@@ -107,14 +107,24 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
         val searchView = searchViewMenuItem.actionView as SearchView
         searchView.queryHint = resources.getString(R.string.search_query_hint)
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
+            private var latestQuery: String? = null
+
             override fun onQueryTextSubmit(query: String?): Boolean {
-                viewModel.getImages(query)
-                return true
+                handleQuery(query)
+                return false
             }
 
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.getImages(newText)
-                return true
+            override fun onQueryTextChange(query: String?): Boolean {
+                handleQuery(query)
+                return false
+            }
+
+            private fun handleQuery(query: String?) {
+                if (query != latestQuery) {
+                    viewModel.getImages(query)
+                    latestQuery = query
+                }
             }
         })
     }
