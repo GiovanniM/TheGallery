@@ -22,7 +22,8 @@ private class ImagesRepositoryImpl(private val service: RedditService = RedditSe
         } else {
             service.getImages(keyword).execute().body()?.getImages()
                 ?.filter { redditImage: RedditImage ->
-                    redditImage.thumbUrl.endsWith(".jpg") and redditImage.fullUrl.endsWith(".jpg")
+                    redditImage.thumbUrl?.endsWith(".jpg") ?: false
+                            && redditImage.fullUrl?.endsWith(".jpg") ?: false
                 } ?: emptyList()
         }
     }

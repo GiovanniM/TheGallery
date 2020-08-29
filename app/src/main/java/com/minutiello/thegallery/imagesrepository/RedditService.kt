@@ -19,7 +19,7 @@ class RedditServiceFactory {
 
 interface RedditService {
 
-    @GET("r/{keyword}/top.json")
+    @GET("r/{keyword}/top.json?limit=100")
     fun getImages(@Path("keyword") keyword: String): Call<RedditResponse>
 
     @GET("r/{keyword}/top.json")
