@@ -17,7 +17,7 @@ class GalleryViewModel(private val galleryUseCase: GalleryUseCase) : ViewModel()
     private val _imagesLiveData = MutableLiveData<List<RedditImage>>()
     val imagesLiveData = _imagesLiveData as LiveData<List<RedditImage>>
 
-    fun getImages(keyword: String) {
+    fun getImages(keyword: String?) {
         viewModelScope.launch(context = Dispatchers.IO) {
             _imagesLiveData.postValue(galleryUseCase.getImages(keyword))
         }
