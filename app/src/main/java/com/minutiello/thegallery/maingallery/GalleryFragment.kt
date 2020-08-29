@@ -1,5 +1,6 @@
 package com.minutiello.thegallery.maingallery
 
+import android.graphics.Rect
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.minutiello.thegallery.R
 import com.minutiello.thegallery.databinding.GalleryFragmentBinding
 
 class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Fragment() {
 
     private var _binding: GalleryFragmentBinding? = null
     private val binding get() = _binding!!
+
+    private val redditAdapter = RedditImagesAdapter()
 
     companion object {
         fun newInstance() = GalleryFragment()
@@ -35,18 +39,35 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val gridManager: RecyclerView.LayoutManager = GridLayoutManager(context, 3)
-        val redditAdapter = RedditImagesAdapter()
-        binding.recyclerView.apply {
-            setHasFixedSize(true)
-            layoutManager = gridManager
-            adapter = redditAdapter
-        }
+        setupRecyclerView()
         viewModel.imagesLiveData.observe(viewLifecycleOwner, Observer { images ->
             redditAdapter.dataSet = images
             redditAdapter.notifyDataSetChanged()
         })
         viewModel.getImages("cat")
+    }
+
+    private fun setupRecyclerView() {
+        val gridManager: RecyclerView.LayoutManager = GridAutoFitLayoutManager(
+            requireContext(), resources.getDimension(R.dimen.grid_item_size).toInt()
+        )
+        binding.recyclerView.apply {
+            setHasFixedSize(true)
+            layoutManager = gridManager
+            adapter = redditAdapter
+            val spacing = resources.getDimensionPixelSize(R.dimen.grid_item_spacing)
+            setPadding(spacing, spacing, spacing, spacing)
+            addItemDecoration(object : ItemDecoration() {
+                override fun getItemOffsets(
+                    outRect: Rect,
+                    view: View,
+                    parent: RecyclerView,
+                    state: RecyclerView.State
+                ) {
+                    outRect.set(spacing, spacing, spacing, spacing)
+                }
+            })
+        }
     }
 
     override fun onDestroyView() {
