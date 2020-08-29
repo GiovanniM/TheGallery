@@ -2,9 +2,8 @@ package com.minutiello.thegallery.maingallery
 
 import android.graphics.Rect
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -33,6 +32,7 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        setHasOptionsMenu(true)
         _binding = GalleryFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -73,5 +73,28 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.gallery_fragment_menu, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+        val searchViewMenuItem = menu.findItem(R.id.search)
+        val searchView = searchViewMenuItem.actionView as SearchView
+        searchView.queryHint = resources.getString(R.string.search_query_hint)
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                viewModel.getImages(query)
+                return true
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.getImages(newText)
+                return true
+            }
+
+        })
     }
 }
