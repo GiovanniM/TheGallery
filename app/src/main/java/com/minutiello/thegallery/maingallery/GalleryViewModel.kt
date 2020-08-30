@@ -1,16 +1,23 @@
 package com.minutiello.thegallery.maingallery
 
 import androidx.lifecycle.*
+import com.minutiello.thegallery.redditrepository.ImageCacheService
 import kotlinx.coroutines.*
 
 @Suppress("UNCHECKED_CAST")
-class ViewModelFactory constructor(private val galleryUseCase: GalleryUseCase) :
+class ViewModelFactory constructor(
+    private val galleryUseCase: GalleryUseCase,
+    private val imageCacheService: ImageCacheService
+) :
     ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T =
-        GalleryViewModel(galleryUseCase) as T
+        GalleryViewModel(galleryUseCase, imageCacheService) as T
 }
 
-class GalleryViewModel(private val galleryUseCase: GalleryUseCase) : ViewModel() {
+class GalleryViewModel(
+    private val galleryUseCase: GalleryUseCase,
+    private val imageCacheService: ImageCacheService
+) : ViewModel() {
 
     private var searchJob: Job? = null
 
@@ -52,6 +59,7 @@ class GalleryViewModel(private val galleryUseCase: GalleryUseCase) : ViewModel()
                             images = images
                         )
                     )
+                    imageCacheService.downloadImages(images)
                 }
             }
         }

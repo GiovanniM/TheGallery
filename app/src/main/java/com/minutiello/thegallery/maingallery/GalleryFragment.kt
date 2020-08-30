@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.minutiello.thegallery.R
 import com.minutiello.thegallery.databinding.GalleryFragmentBinding
+import com.minutiello.thegallery.redditrepository.ImageCacheServiceFactory
 import com.minutiello.thegallery.redditrepository.ImagesRepositoryFactory
 import com.minutiello.thegallery.redditrepository.RedditServiceFactory
 
@@ -34,7 +35,7 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
                     requireContext(),
                     RedditServiceFactory().getRedditService()
                 )
-            )
+            ), ImageCacheServiceFactory().newInstance(requireContext())
         )
     }
 
