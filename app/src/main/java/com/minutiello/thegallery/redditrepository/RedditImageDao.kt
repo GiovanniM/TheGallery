@@ -9,6 +9,9 @@ interface RedditImageDao {
     @Query("SELECT * FROM redditimage WHERE keyword LIKE :keyword")
     fun getImages(keyword: String): List<RedditImage>
 
+    @Query("SELECT * FROM redditimage WHERE favourite = 1")
+    fun getFavourites(): List<RedditImage>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg images: RedditImage)
 

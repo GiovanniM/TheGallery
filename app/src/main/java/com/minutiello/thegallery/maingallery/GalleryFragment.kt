@@ -52,6 +52,7 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
         viewModel.imagesLiveData.observe(viewLifecycleOwner, { galleryUIModel ->
             bindUIModel(galleryUIModel)
         })
+        viewModel.getImages("")
     }
 
     private fun bindUIModel(galleryUIModel: GalleryUIModel) {
@@ -61,11 +62,12 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
             } else {
                 View.GONE
             }
-            binding.emptySearchHint.visibility = if (query.isNullOrEmpty()) {
-                View.VISIBLE
-            } else {
-                View.GONE
-            }
+            binding.emptySearchHint.visibility =
+                if (query.isNullOrEmpty() && images.isEmpty() && !searching) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
             binding.emptySearchResult.visibility =
                 if (!query.isNullOrEmpty() && images.isEmpty() && !searching) {
                     View.VISIBLE

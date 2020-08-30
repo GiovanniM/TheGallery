@@ -5,6 +5,7 @@ import java.lang.Exception
 
 interface ImagesRepository {
     fun getImages(keyword: String): List<RedditImage>
+    fun getFavourites(): List<RedditImage>
     fun getRedditImageLiveData(id: String): LiveData<RedditImage>
     fun changeFavourite(id: String)
 }
@@ -29,6 +30,10 @@ private class ImagesRepositoryImpl(
             insertImagesIntoDb(images)
             images
         }
+    }
+
+    override fun getFavourites(): List<RedditImage> {
+        return redditImageDao.getFavourites()
     }
 
     override fun getRedditImageLiveData(id: String): LiveData<RedditImage> {

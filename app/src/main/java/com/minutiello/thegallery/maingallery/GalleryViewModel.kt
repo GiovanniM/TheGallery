@@ -31,38 +31,26 @@ class GalleryViewModel(
     val imagesLiveData = _imagesLiveData as LiveData<GalleryUIModel>
 
     fun getImages(keyword: String?) {
-        if (keyword.isNullOrEmpty()) {
-            searchJob?.cancel()
-            _imagesLiveData.postValue(
-                GalleryUIModel(
-                    searching = false,
-                    query = null,
-                    images = emptyList()
-                )
+        searchJob?.cancel()
+        _imagesLiveData.postValue(
+            GalleryUIModel(
+                searching = true,
+                query = keyword,
+                images = emptyList()
             )
-        } else {
-            searchJob?.cancel()
-            _imagesLiveData.postValue(
-                GalleryUIModel(
-                    searching = true,
-                    query = keyword,
-                    images = emptyList()
-                )
-            )
-            searchJob = viewModelScope.launch(context = Dispatchers.IO) {
-                val images = galleryUseCase.getImages(keyword)
-                if (isActive) {
-                    _imagesLiveData.postValue(
-                        GalleryUIModel(
-                            searching = false,
-                            query = keyword,
-                            images = images
-                        )
+        )
+        searchJob = viewModelScope.launch(context = Dispatchers.IO) {
+            val images = galleryUseCase.getImages(keyword)
+            if (isActive) {
+                _imagesLiveData.postValue(
+                    GalleryUIModel(
+                        searching = false,
+                        query = keyword,
+                        images = images
                     )
-                    imageCacheService.downloadImages(images)
-                }
+                )
+                imageCacheService.downloadImages(images)
             }
         }
     }
-
 }
