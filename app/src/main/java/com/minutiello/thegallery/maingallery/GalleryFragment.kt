@@ -135,10 +135,6 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
                 loadSettings()
                 true
             }
-            R.id.favourites -> {
-                loadFavourites()
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -150,9 +146,5 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
 
     private fun loadSettings() {
         (activity as MainActivity).loadSettings()
-    }
-
-    private fun loadFavourites() {
-        (activity as MainActivity).loadFavourites()
     }
 }

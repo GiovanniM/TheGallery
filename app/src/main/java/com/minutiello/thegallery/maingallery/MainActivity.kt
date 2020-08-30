@@ -33,8 +33,4 @@ class MainActivity : AppCompatActivity() {
             .addToBackStack(TRANSACTION_TAG)
             .commit()
     }
-
-    fun loadFavourites() {
-        //TODO: to implement
-    }
 }

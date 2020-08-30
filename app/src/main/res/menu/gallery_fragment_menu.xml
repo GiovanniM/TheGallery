@@ -10,11 +10,6 @@
         app:showAsAction="always" />
 
     <item
-        android:id="@+id/favourites"
-        android:title="@string/favourites"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/settings"
         android:title="@string/settings"
         app:showAsAction="never" />
