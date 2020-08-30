@@ -59,13 +59,14 @@ class DetailsPageFragment(factoryProducer: ViewModelProvider.Factory? = null) : 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getRedditImageLiveData(getRedditImageId())
+        viewModel.imageLiveData
             .observe(viewLifecycleOwner, { redditImage: RedditImage ->
                 loadImage(redditImage)
                 loadInfo(redditImage)
                 initClickListener()
                 activity?.invalidateOptionsMenu()
             })
+        viewModel.getImage(getRedditImageId())
     }
 
     private fun loadImage(redditImage: RedditImage) {

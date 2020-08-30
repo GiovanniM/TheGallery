@@ -1,9 +1,6 @@
 package com.minutiello.thegallery.details
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.minutiello.thegallery.redditrepository.RedditImage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,13 +16,19 @@ class ViewModelFactory constructor(
 
 class DetailsViewModel(private val detailsUseCase: DetailsUseCase) : ViewModel() {
 
-    fun getRedditImageLiveData(id: String): LiveData<RedditImage> {
-        return detailsUseCase.getRedditImageLiveData(id)
+    private val _imageLiveData = MutableLiveData<RedditImage>()
+    val imageLiveData = _imageLiveData as LiveData<RedditImage>
+
+    fun getImage(id: String) {
+        viewModelScope.launch(context = Dispatchers.IO) {
+            _imageLiveData.postValue(detailsUseCase.getImage(id))
+        }
     }
 
     fun changeFavourite(id: String) {
         viewModelScope.launch(context = Dispatchers.IO) {
             detailsUseCase.changeFavourite(id)
+            _imageLiveData.postValue(detailsUseCase.getImage(id))
         }
     }
 

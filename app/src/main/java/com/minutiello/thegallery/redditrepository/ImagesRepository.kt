@@ -1,12 +1,11 @@
 package com.minutiello.thegallery.redditrepository
 
-import androidx.lifecycle.LiveData
 import java.lang.Exception
 
 interface ImagesRepository {
     fun getImages(keyword: String?): List<RedditImage>
     fun getFavourites(): List<RedditImage>
-    fun getRedditImageLiveData(id: String): LiveData<RedditImage>
+    fun getImage(id: String): RedditImage
     fun changeFavourite(id: String)
 }
 
@@ -39,8 +38,8 @@ private class ImagesRepositoryImpl(
         return redditImageDao.getFavourites()
     }
 
-    override fun getRedditImageLiveData(id: String): LiveData<RedditImage> {
-        return redditImageDao.getRedditImageLiveData(id)
+    override fun getImage(id: String): RedditImage {
+        return redditImageDao.getRedditImage(id)
     }
 
     override fun changeFavourite(id: String) {

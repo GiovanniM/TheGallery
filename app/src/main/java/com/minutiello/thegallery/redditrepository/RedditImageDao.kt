@@ -1,6 +1,5 @@
 package com.minutiello.thegallery.redditrepository
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 @Dao
@@ -14,9 +13,6 @@ interface RedditImageDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insertAll(vararg images: RedditImage)
-
-    @Query("SELECT * FROM redditimage WHERE id LIKE :id")
-    fun getRedditImageLiveData(id: String): LiveData<RedditImage>
 
     @Query("SELECT * FROM redditimage WHERE id LIKE :id")
     fun getRedditImage(id: String): RedditImage
