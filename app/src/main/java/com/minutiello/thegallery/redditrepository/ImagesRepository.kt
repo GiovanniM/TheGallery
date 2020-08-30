@@ -31,13 +31,13 @@ private class ImagesRepositoryImpl(
 
     private fun getImagesFromService(keyword: String): List<RedditImage> {
         return try {
-        return service.getImages(keyword).execute().body()?.getImages()
-            ?.filter { redditImage: RedditImage ->
-                redditImage.thumbUrl?.endsWith(".jpg") ?: false
-                        && redditImage.fullUrl?.endsWith(".jpg") ?: false
-            }?.map { redditImage: RedditImage ->
-                redditImage.copy(keyword = keyword)
-            } ?: emptyList()
+            service.getImages(keyword).execute().body()?.getImages()
+                ?.filter { redditImage: RedditImage ->
+                    redditImage.thumbUrl?.endsWith(".jpg") ?: false
+                            && redditImage.fullUrl?.endsWith(".jpg") ?: false
+                }?.map { redditImage: RedditImage ->
+                    redditImage.copy(keyword = keyword)
+                } ?: emptyList()
         } catch (exception: Exception) {
             emptyList()
         }
