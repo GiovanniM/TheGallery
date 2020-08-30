@@ -13,6 +13,7 @@ import com.minutiello.thegallery.R
 import com.minutiello.thegallery.databinding.GalleryFragmentBinding
 import com.minutiello.thegallery.redditrepository.ImageCacheServiceFactory
 import com.minutiello.thegallery.redditrepository.ImagesRepositoryFactory
+import com.minutiello.thegallery.redditrepository.RedditImage
 import com.minutiello.thegallery.redditrepository.RedditServiceFactory
 
 class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Fragment() {
@@ -20,9 +21,7 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
     private var _binding: GalleryFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val redditAdapter = RedditImagesAdapter { images, image ->
-        (activity as MainActivity).loadViewPager(images, image)
-    }
+    private val redditAdapter = RedditImagesAdapter { images, image -> loadViewPager(images, image) }
 
     companion object {
         fun newInstance() = GalleryFragment()
@@ -127,5 +126,24 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
                 return false
             }
         })
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.settings -> {
+                loadSettings()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    //TODO: Refactor these methods to use an interface instead of direct cast to MainActivity
+    private fun loadViewPager(images: List<RedditImage>, selectedImage: RedditImage) {
+        (activity as MainActivity).loadViewPager(images, selectedImage)
+    }
+
+    private fun loadSettings() {
+        (activity as MainActivity).loadSettings()
     }
 }
