@@ -2,7 +2,6 @@ package com.minutiello.thegallery.maingallery
 
 import androidx.lifecycle.*
 import kotlinx.coroutines.*
-import java.lang.Exception
 
 @Suppress("UNCHECKED_CAST")
 class ViewModelFactory constructor(private val galleryUseCase: GalleryUseCase) :
@@ -44,23 +43,13 @@ class GalleryViewModel(private val galleryUseCase: GalleryUseCase) : ViewModel()
                 )
             )
             searchJob = viewModelScope.launch(context = Dispatchers.IO) {
-                try {
-                    val images = galleryUseCase.getImages(keyword)
-                    if (isActive) {
-                        _imagesLiveData.postValue(
-                            GalleryUIModel(
-                                searching = false,
-                                query = keyword,
-                                images = images
-                            )
-                        )
-                    }
-                } catch (exception: Exception) {
+                val images = galleryUseCase.getImages(keyword)
+                if (isActive) {
                     _imagesLiveData.postValue(
                         GalleryUIModel(
                             searching = false,
                             query = keyword,
-                            images = emptyList()
+                            images = images
                         )
                     )
                 }

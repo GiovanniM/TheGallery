@@ -11,13 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 import com.minutiello.thegallery.R
 import com.minutiello.thegallery.databinding.GalleryFragmentBinding
+import com.minutiello.thegallery.redditrepository.ImagesRepositoryFactory
+import com.minutiello.thegallery.redditrepository.RedditServiceFactory
 
 class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Fragment() {
 
     private var _binding: GalleryFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private val redditAdapter = RedditImagesAdapter {images, image ->
+    private val redditAdapter = RedditImagesAdapter { images, image ->
         (activity as MainActivity).loadViewPager(images, image)
     }
 
@@ -26,7 +28,14 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
     }
 
     private val viewModel: GalleryViewModel by viewModels {
-        factoryProducer ?: ViewModelFactory(GalleryUseCaseImpl())
+        factoryProducer ?: ViewModelFactory(
+            GalleryUseCaseImpl(
+                ImagesRepositoryFactory().getImagesRepository(
+                    requireContext(),
+                    RedditServiceFactory().getRedditService()
+                )
+            )
+        )
     }
 
     override fun onCreateView(
