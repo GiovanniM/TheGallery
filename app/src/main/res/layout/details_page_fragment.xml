@@ -10,25 +10,46 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
-    <TextView
-        android:id="@+id/image_title_author_text_view"
-        android:padding="16dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/top_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top"
-        android:textSize="20sp"
-        android:background="@drawable/gradient_top"
-        android:textColor="@android:color/white" />
+        android:padding="16dp"
+        android:background="@drawable/gradient_top">
+
+        <TextView
+            android:id="@+id/image_title_author_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/favourite_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/favourite_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image_title_author_text_view"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <TextView
         android:id="@+id/image_date_likes_text_view"
-        android:padding="16dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:textSize="20sp"
         android:background="@drawable/gradient_bottom"
-        android:textColor="@android:color/white" />
+        android:padding="16dp"
+        android:textColor="@android:color/white"
+        android:textSize="20sp" />
 
 </FrameLayout>

@@ -1,20 +1,22 @@
 package com.minutiello.thegallery.redditrepository
 
-import android.content.Context
+import androidx.lifecycle.LiveData
 import java.lang.Exception
 
 interface ImagesRepository {
     fun getImages(keyword: String): List<RedditImage>
+    fun getRedditImageLiveData(id: String): LiveData<RedditImage>
+    fun changeFavourite(id: String)
 }
 
 class ImagesRepositoryFactory {
-    fun getImagesRepository(context: Context, service: RedditService): ImagesRepository {
-        return ImagesRepositoryImpl(context, service)
+    fun getImagesRepository(redditImageDao: RedditImageDao, service: RedditService): ImagesRepository {
+        return ImagesRepositoryImpl(redditImageDao, service)
     }
 }
 
 private class ImagesRepositoryImpl(
-    private val context: Context,
+    private val redditImageDao: RedditImageDao,
     private val service: RedditService
 ) :
     ImagesRepository {
@@ -24,9 +26,17 @@ private class ImagesRepositoryImpl(
         return if (images.isEmpty()) {
             getImagesFromDb(keyword)
         } else {
-            insertImagesIntoDb(keyword, images)
+            insertImagesIntoDb(images)
             images
         }
+    }
+
+    override fun getRedditImageLiveData(id: String): LiveData<RedditImage> {
+        return redditImageDao.getRedditImageLiveData(id)
+    }
+
+    override fun changeFavourite(id: String) {
+        redditImageDao.changeFavourite(id)
     }
 
     private fun getImagesFromService(keyword: String): List<RedditImage> {
@@ -43,12 +53,12 @@ private class ImagesRepositoryImpl(
         }
     }
 
-    private fun insertImagesIntoDb(keyword: String, images: List<RedditImage>) {
-        AppDatabaseFactory.getInstance(context).redditImageDao().insertAll(*images.toTypedArray())
+    private fun insertImagesIntoDb(images: List<RedditImage>) {
+        redditImageDao.insertAll(*images.toTypedArray())
     }
 
     private fun getImagesFromDb(keyword: String): List<RedditImage> {
-        return AppDatabaseFactory.getInstance(context).redditImageDao().getImages(keyword)
+        return redditImageDao.getImages(keyword)
     }
 
 }

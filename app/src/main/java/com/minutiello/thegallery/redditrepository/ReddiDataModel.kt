@@ -25,5 +25,6 @@ data class RedditImage(
     @field:Json(name = "author") val author: String?,
     @field:Json(name = "score") val score: Long?,
     @field:Json(name = "thumbnail") val thumbUrl: String?,
-    @field:Json(name = "url") val fullUrl: String?
+    @field:Json(name = "url") val fullUrl: String?,
+    val favourite: Boolean?
 ) : Serializable

@@ -8,10 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import com.minutiello.thegallery.databinding.ViewpagerFragmentBinding
-import com.minutiello.thegallery.redditrepository.RedditImage
 
-private const val ARG_IMAGES = "ARG_IMAGES"
-private const val ARG_SELECTED_IMAGE = "ARG_SELECTED_IMAGE"
+private const val ARG_IMAGES_IDS = "ARG_IMAGES_IDS"
+private const val ARG_SELECTED_IMAGE_ID = "ARG_SELECTED_IMAGE_ID"
 
 class ViewPagerFragment : Fragment() {
 
@@ -19,11 +18,11 @@ class ViewPagerFragment : Fragment() {
     private val binding get() = _binding!!
 
     companion object {
-        fun newInstance(images: List<RedditImage>, selectedImage: RedditImage): Fragment {
+        fun newInstance(images: List<String>, selectedImage: String): Fragment {
             return ViewPagerFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(ARG_IMAGES, ArrayList<RedditImage>(images))
-                    putSerializable(ARG_SELECTED_IMAGE, selectedImage)
+                    putStringArrayList(ARG_IMAGES_IDS, ArrayList(images))
+                    putString(ARG_SELECTED_IMAGE_ID, selectedImage)
                 }
             }
         }
@@ -39,8 +38,8 @@ class ViewPagerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val images = arguments?.getSerializable(ARG_IMAGES) as ArrayList<RedditImage>
-        val selectedImage = arguments?.getSerializable(ARG_SELECTED_IMAGE) as RedditImage
+        val images = arguments?.getStringArrayList(ARG_IMAGES_IDS) ?: emptyList<String>()
+        val selectedImage = arguments?.getString(ARG_SELECTED_IMAGE_ID) ?: ""
         val adapter = RedditPagerAdapter(childFragmentManager, images)
         binding.viewPager.adapter = adapter
         binding.viewPager.currentItem = images.indexOf(selectedImage)
@@ -52,7 +51,7 @@ class ViewPagerFragment : Fragment() {
     }
 }
 
-private class RedditPagerAdapter(fm: FragmentManager, var dataSet: List<RedditImage> = emptyList()) :
+private class RedditPagerAdapter(fm: FragmentManager, var dataSet: List<String> = emptyList()) :
     FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getCount(): Int {
