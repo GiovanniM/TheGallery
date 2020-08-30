@@ -9,9 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
+import com.minutiello.thegallery.MainActivity
 import com.minutiello.thegallery.R
 import com.minutiello.thegallery.databinding.GalleryFragmentBinding
 import com.minutiello.thegallery.redditrepository.*
+
+private const val ARG_USE_CASE = "ARG_USE_CASE"
 
 class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Fragment() {
 
@@ -23,25 +26,48 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
     }
 
     companion object {
-        fun newInstance() = GalleryFragment()
+        fun newShowFavouritesInstance(): GalleryFragment {
+            return GalleryFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_USE_CASE, UseCase.FAVOURITES)
+                }
+            }
+        }
+
+        fun newSearchInstance(): GalleryFragment {
+            return GalleryFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_USE_CASE, UseCase.SEARCH)
+                }
+            }
+        }
+    }
+
+    private fun getUseCase(): UseCase {
+        return arguments?.getSerializable(ARG_USE_CASE) as UseCase
     }
 
     private val viewModel: GalleryViewModel by viewModels {
-        factoryProducer ?: ViewModelFactory(
-            GalleryUseCaseImpl(
-                ImagesRepositoryFactory().getImagesRepository(
-                    AppDatabaseFactory.getInstance(requireContext()).redditImageDao(),
-                    RedditServiceFactory().getRedditService()
-                )
-            ), ImageCacheServiceFactory().newInstance(requireContext())
-        )
+        factoryProducer ?: getViewModelFactory()
+    }
+
+    private fun getViewModelFactory(): ViewModelFactory {
+        val useCase = getUseCase()
+        val dao = AppDatabaseFactory.getInstance(requireContext()).redditImageDao()
+        val service = RedditServiceFactory().getRedditService()
+        val imageRepository = ImagesRepositoryFactory().getImagesRepository(dao, service)
+        val imageCacheService = ImageCacheServiceFactory().newInstance(requireContext())
+        val galleryUseCase = GalleryUseCaseFactory().getGalleryUseCase(useCase, imageRepository)
+        return ViewModelFactory(galleryUseCase, imageCacheService)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        setHasOptionsMenu(true)
+        if (getUseCase() == UseCase.SEARCH) {
+            setHasOptionsMenu(true)
+        }
         _binding = GalleryFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,7 +78,9 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
         viewModel.imagesLiveData.observe(viewLifecycleOwner, { galleryUIModel ->
             bindUIModel(galleryUIModel)
         })
-        viewModel.getImages("")
+        if (getUseCase() == UseCase.FAVOURITES) {
+            viewModel.getImages("")
+        }
     }
 
     private fun bindUIModel(galleryUIModel: GalleryUIModel) {
@@ -135,6 +163,10 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
                 loadSettings()
                 true
             }
+            R.id.favourites -> {
+                loadFavourites()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -146,5 +178,9 @@ class GalleryFragment(factoryProducer: ViewModelProvider.Factory? = null) : Frag
 
     private fun loadSettings() {
         (activity as MainActivity).loadSettings()
+    }
+
+    private fun loadFavourites() {
+        (activity as MainActivity).loadFavourites()
     }
 }

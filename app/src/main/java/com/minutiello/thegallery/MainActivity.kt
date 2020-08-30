@@ -1,9 +1,9 @@
-package com.minutiello.thegallery.maingallery
+package com.minutiello.thegallery
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.minutiello.thegallery.R
 import com.minutiello.thegallery.details.ViewPagerFragment
+import com.minutiello.thegallery.maingallery.GalleryFragment
 import com.minutiello.thegallery.settings.SettingsFragment
 
 private const val TRANSACTION_TAG = "TRANSACTION_TAG"
@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.main_fragment_container, GalleryFragment.newInstance())
+            .replace(R.id.main_fragment_container, GalleryFragment.newSearchInstance())
             .commit()
     }
 
@@ -30,6 +30,13 @@ class MainActivity : AppCompatActivity() {
     fun loadSettings() {
         supportFragmentManager.beginTransaction()
             .replace(R.id.main_fragment_container, SettingsFragment())
+            .addToBackStack(TRANSACTION_TAG)
+            .commit()
+    }
+
+    fun loadFavourites() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.main_fragment_container, GalleryFragment.newShowFavouritesInstance())
             .addToBackStack(TRANSACTION_TAG)
             .commit()
     }

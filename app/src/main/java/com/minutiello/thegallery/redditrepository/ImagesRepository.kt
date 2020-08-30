@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import java.lang.Exception
 
 interface ImagesRepository {
-    fun getImages(keyword: String): List<RedditImage>
+    fun getImages(keyword: String?): List<RedditImage>
     fun getFavourites(): List<RedditImage>
     fun getRedditImageLiveData(id: String): LiveData<RedditImage>
     fun changeFavourite(id: String)
@@ -22,7 +22,10 @@ private class ImagesRepositoryImpl(
 ) :
     ImagesRepository {
 
-    override fun getImages(keyword: String): List<RedditImage> {
+    override fun getImages(keyword: String?): List<RedditImage> {
+        if (keyword.isNullOrEmpty()) {
+            return emptyList()
+        }
         val images = getImagesFromService(keyword)
         return if (images.isEmpty()) {
             getImagesFromDb(keyword)

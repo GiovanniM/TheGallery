@@ -13,5 +13,6 @@
     <string name="download_summary_on">Download all images in advance to show them also offline. Turn off to save data</string>
     <string name="download_summary_off">Download all images in advance to show them also offline. Turn on to download all images after a search</string>
     <string name="favourite">Favourite</string>
+    <string name="favourites">Favourites</string>
 
 </resources>
