@@ -77,9 +77,9 @@ class DetailsPageFragment : Fragment() {
         binding.fullImageView.setOnClickListener {
             if (showingInfo) {
                 binding.imageTitleAuthorTextView.animate()
-                    .translationY(-binding.imageTitleAuthorTextView.measuredHeight.toFloat())
+                    .translationY(-binding.imageTitleAuthorTextView.measuredHeight.toFloat()*2)
                 binding.imageDateLikesTextView.animate()
-                    .translationY(binding.imageDateLikesTextView.measuredHeight.toFloat())
+                    .translationY(binding.imageDateLikesTextView.measuredHeight.toFloat()*2)
             } else {
                 binding.imageTitleAuthorTextView.animate().translationY(0f)
                 binding.imageDateLikesTextView.animate().translationY(0f)
